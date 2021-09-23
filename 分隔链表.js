@@ -11,22 +11,27 @@ function ListNode(val, next) {
  */
 var splitListToParts = function(head, k) {
     let count = 0;
-    let arr = [];
-    while (head !== null) {
+    let arr = [],
+        node = head;
+    while (node !== null) {
         count += 1;
-        head = head.next;
+        node = node.next;
     }
     let base = parseInt(count / k);
-    let add = count - k * base;
-    for (let i = 0; i < k; i++) {
-        if (add > 0) {
-            arr.push(base + 1);
-            add -= 1;
-        } else {
-            arr.push(base);
+    let add = count % k;
+    node = head;
+    arr = new Array(k).fill(null);
+    for (let i = 0; i < k && node !== null; i++) {
+        arr[i] = node;
+        for (let j = 1; j < base + (add > 0 || 0); j++) {
+            node = node.next;
         }
+        const next = node.next || null;
+        node.next = null;
+        node = next;
+        add -= (add > 0 || 0);
     }
-    console.log(count, arr)
+    return arr
 };
 node1 = new ListNode(1);
 node2 = new ListNode(2);
@@ -35,4 +40,4 @@ node3 = new ListNode(3);
 node2.next = node3;
 node4 = new ListNode(4);
 node3.next = node4;
-splitListToParts(node1, 10)
+console.log(splitListToParts(node1, 3))
