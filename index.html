@@ -1,11 +1,15 @@
-<button onclick="debounce(test, 1000)('test')">点击</button>
+<button onclick="debounce(test, 1000)('test')">防抖</button>
+<button onclick="throll1(log,2000)('helloworld')">节流1</button>
+<button onclick="throll2(log,2000)('helloworld')">节流2</button>
+
 <script>
 function test (arg) {
     console.log(arg)
   }
 //用定时器实现防抖
+var timer=null;
+var open = new Date()
 function debounce(func,wait) {
-    var timer=null;
     return function() {
     //保存当前调用的dom对象
      var _this=this;
@@ -16,8 +20,30 @@ function debounce(func,wait) {
          func.apply(_this,args)
      },wait)
     }
-
 }
-
+// 节流
+function throll1(fn,delay){
+    return (arg)=>{
+        if(!timer){
+            timer = setTimeout(()=>{
+                timer = null
+                fn(arg)
+        },delay)
+        }
+    }
+}
+let pre = new Date()
+function throll2(fn,delay){
+    return (arg)=>{
+        let now = new Date()
+        if(now-pre>=delay){
+            fn(arg)
+            pre = new Date()
+        }
+    }
+}
+function log(msg){
+    console.log(msg)
+}
 
 </script>
